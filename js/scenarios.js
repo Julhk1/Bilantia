@@ -15,13 +15,13 @@ const academyScenarios = {
         },
         2: {
             title: "L1 - Étape 2 : L'Activité Économique - Charges et Produits",
-            theory: "Alors que le Bilan fige le patrimoine, le <strong>Compte de Résultat</strong> mesure l'activité de l'entreprise sur une période (l'exercice). Il oppose les <strong>Charges</strong> (classe 6, les dépenses nécessaires qui appauvrissent l'entreprise, comme le loyer ou l'électricité) aux <strong>Produits</strong> (classe 7, les ventes qui l'enrichissent). Les charges augmentent toujours au <strong>Débit</strong>, car elles représentent une consommation d'énergie économique.",
+            theory: "Alors que le Bilan fige le patrimoine, le <strong>Compte de Résultat</strong> mesure l'activité de l'entreprise sur une période (l'exercice). Il oppose les <strong>Charges</strong> (classe 6, les dépenses nécessaires qui appauvrissent l'entreprise, comme le loyer ou l'électricité) aux <strong>Produits</strong> (classe 7, les ventes qui l'enrichissent). Les charges augmentent toujours au <strong>Débit</strong>, car elles représentent une consommation d'énergie économique. Attention à bien choisir le compte de charge selon sa nature réelle : un loyer est une <strong>charge externe</strong> (compte <strong>613 - Locations</strong>), jamais un achat de matières premières (601).",
             exercise: {
                 instruction: "L'entreprise paie immédiatement par virement bancaire son premier loyer commercial pour un montant de 3 000 €.",
-                accountsAllowed: ["601", "512"],
-                expectedEntries: { "601": { debit: 3000 }, "512": { credit: 3000 } }
+                accountsAllowed: ["613", "512"],
+                expectedEntries: { "613": { debit: 3000 }, "512": { credit: 3000 } }
             },
-            explanation: { success: "Correct ! Le loyer est une charge (Débit du compte 601) qui vient imputer négativement ton résultat net de 3 000 €. La Banque (Crédit 512) diminue à l'actif." }
+            explanation: { success: "Correct ! Le loyer est une charge externe (Débit du compte 613 - Locations, jamais le 601 réservé aux achats de matières) qui vient imputer négativement ton résultat net de 3 000 €. La Banque (Crédit 512) diminue à l'actif." }
         },
         3: {
             title: "L1 - Étape 3 : La Richesse Créée - Le flux de Produits",
@@ -608,13 +608,13 @@ const academyScenarios = {
         },
         6: {
             title: "Mois 11 : Facture d'énergie (Électricité des fours)",
-            theory: "La cuisson du pain consomme énormément d'électricité. C'est une charge externe d'exploitation courante.",
+            theory: "La cuisson du pain consomme énormément d'électricité. C'est une charge externe d'exploitation courante, à distinguer d'un achat de matières premières : l'énergie et les fournitures non stockables se comptabilisent au compte <strong>606 - Achats Non Stockés (Fournitures, Énergie)</strong>, jamais au 601 réservé à la farine et aux ingrédients.",
             exercise: {
                 instruction: "Enregistrez la facture d'électricité EDF pour un montant de 3 000 € HT (+ 600 € de TVA déductible à 20%), payée immédiatement par banque.",
-                accountsAllowed: ["601", "44566", "512"],
-                expectedEntries: { "601": { debit: 3000 }, "44566": { debit: 600 }, "512": { credit: 3600 } }
+                accountsAllowed: ["606", "44566", "512"],
+                expectedEntries: { "606": { debit: 3000 }, "44566": { debit: 600 }, "512": { credit: 3600 } }
             },
-            explanation: { success: "Charge d'énergie comptabilisée. Le résultat s'ajuste en temps réel." }
+            explanation: { success: "Charge d'énergie comptabilisée sur le bon compte (606, distinct des matières premières). Le résultat s'ajuste en temps réel." }
         },
         7: {
             title: "Mois 12 : Salaire de l'apprenti boulanger",
@@ -930,7 +930,3 @@ const academyScenarios = {
         },
     }
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = academyScenarios;
-}
