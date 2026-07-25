@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilantia — Simulateur d'Écriture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <div class="logo" onclick="if(confirm('Quitter la session en cours ?')) window.location.href='index.html'">Bilantia</div>
+            <div id="module-title" class="mission-subtitle">Initialisation du cours...</div>
+        </div>
+        <div class="header-right-block">
+            <button onclick="window.location.href='index.html'" class="btn-secondary">← Menu</button>
+            <button onclick="skipStepTesting()" class="btn-secondary" style="background:rgba(201,162,39,0.08); color:var(--gold-bright); border-color:rgba(201,162,39,0.3);" title="Outil de test : remplit l'écriture attendue automatiquement">⏩ Test</button>
+            <div class="xp-container">
+                <div class="xp-text">Score : <span id="xp-display">100</span> XP</div>
+                <div class="xp-bar-container"><div class="xp-bar" id="xp-bar"></div></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ TAB NAV ============ -->
+    <nav class="tab-nav" id="tab-nav">
+        <button class="tab-btn active" data-tab="saisie">📝 Saisie</button>
+        <button class="tab-btn" data-tab="grandlivre">📚 Grand Livre</button>
+        <button class="tab-btn" data-tab="balance">⚖️ Balance</button>
+        <button class="tab-btn" data-tab="bilan">🏛️ Bilan &amp; Résultat</button>
+        <button class="tab-btn" data-tab="analyse">📈 Analyse</button>
+    </nav>
+
+    <!-- ============ TAB: SAISIE ============ -->
+    <div class="tab-panel active" id="tab-saisie">
+        <div class="grid">
+            <div class="panel-left">
+                <div class="card" style="border-left: 4px solid var(--gold);">
+                    <h2 id="step-title" style="font-family:var(--font-display); color:var(--gold-bright); font-size:19px; font-weight:600; margin-bottom:12px;">Concepts Théoriques</h2>
+                    <div id="step-theory" style="font-size: 14.5px; line-height: 1.7; color: #cdd8d0;"></div>
+                </div>
+
+                <div class="card" style="background: var(--bg-inset);">
+                    <div class="piece-strip" id="piece-strip"></div>
+                    <h3 id="exercise-instruction" style="font-size:15px; color:var(--text-main); margin-bottom:16px; line-height:1.55;">🎯 Mission à passer au journal</h3>
+
+                    <div class="form-group">
+                        <label>Compte du Plan Comptable (recherchez par code ou libellé)</label>
+                        <input type="text" id="account-input" list="account-datalist" placeholder="Ex : 512 ou « Banque »" autocomplete="off">
+                        <datalist id="account-datalist"></datalist>
+                        <div id="account-hint" class="account-hint"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <label style="color:var(--debit-red-bright);">Débit (€)</label>
+                            <input type="number" id="input-debit" value="0">
+                        </div>
+                        <div>
+                            <label style="color:var(--emerald-bright);">Crédit (€)</label>
+                            <input type="number" id="input-credit" value="0">
+                        </div>
+                    </div>
+                    <button onclick="handleSaisie()" class="btn-main" style="margin-top: 20px;">Valider et insérer la ligne</button>
+                </div>
+
+                <div class="error-box" id="error-message"></div>
+
+                <div class="card" style="padding:22px;">
+                    <h3 style="font-size:14px; margin-bottom:16px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.5px;">📖 Journal de l'exercice</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Compte</th><th>Débit</th><th>Crédit</th><th></th></tr>
+                        </thead>
+                        <tbody id="journal-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel-right">
+                <div class="card success-card" id="success-panel" style="display:none;">
+                    <h3>🏆 Écriture Validée par l'Expert !</h3>
+                    <p id="success-explanation" style="font-size:14px; line-height:1.65; margin:15px 0; color:#cfe8da;"></p>
+
+                    <button onclick="genererLiasseFiscalePDF()" class="btn-secondary" style="background:var(--credit-blue); color:#08131f; width:100%; margin-bottom:12px; border:none; padding:14px; font-weight:700; border-radius:var(--radius-sm); box-shadow:0 6px 16px rgba(77,143,209,0.3); cursor:pointer;">
+                        📥 Exporter la Liasse (PDF)
+                    </button>
+
+                    <button onclick="nextStep()" class="btn-main" style="background:var(--gradient-emerald); color:#08150f; box-shadow:var(--shadow-emerald);">Étape Suivante ➡️</button>
+                </div>
+
+                <div class="card">
+                    <h2 style="font-family:var(--font-display); color: var(--text-main); margin-bottom:14px; font-size:15px; font-weight:600;">💡 Repères rapides</h2>
+                    <p style="font-size:13px; color:var(--text-muted); line-height:1.7;">
+                        Utilisez les onglets ci-dessus pour naviguer entre votre <strong>saisie</strong>, le <strong>Grand Livre</strong> (détail compte par compte), la <strong>Balance générale</strong> (contrôle global), le <strong>Bilan normé</strong> et votre <strong>rapport d'analyse financière</strong>. Ces vues se mettent à jour en temps réel à chaque écriture.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TAB: GRAND LIVRE ============ -->
+    <div class="tab-panel" id="tab-grandlivre">
+        <div class="card">
+            <h2 class="tab-heading">📚 Grand Livre <span class="tab-heading-sub">— Mouvements détaillés par compte</span></h2>
+            <p class="tab-desc">Chaque compte affiche l'ensemble de ses mouvements Débit / Crédit dans l'ordre de saisie, ainsi que son solde final. C'est le document que consulte un comptable pour justifier n'importe quelle ligne de la Balance.</p>
+            <div id="grandlivre-container"></div>
+        </div>
+    </div>
+
+    <!-- ============ TAB: BALANCE ============ -->
+    <div class="tab-panel" id="tab-balance">
+        <div class="card">
+            <h2 class="tab-heading">⚖️ Balance Générale <span class="tab-heading-sub">— Contrôle d'équilibre</span></h2>
+            <p class="tab-desc">La Balance récapitule, pour chaque compte mouvementé, le cumul des débits, des crédits et le solde qui en résulte. Par construction de la partie double, le total de la colonne Débit doit toujours être rigoureusement égal au total de la colonne Crédit.</p>
+            <div id="balance-container"></div>
+        </div>
+    </div>
+
+    <!-- ============ TAB: BILAN & RÉSULTAT ============ -->
+    <div class="tab-panel" id="tab-bilan">
+        <div class="grid">
+            <div class="panel-left">
+                <div class="card">
+                    <h2 style="font-family:var(--font-display); color: var(--emerald-bright); margin-bottom:6px; font-size:17px; font-weight:600;">⚖️ BILAN <span class="tab-heading-sub">— Présentation Normée PCG</span></h2>
+                    <p class="tab-desc" style="margin-bottom:20px;">Actif immobilisé, circulant et trésorerie à gauche ; Capitaux propres, provisions et dettes classées par nature à droite. Les amortissements et dépréciations viennent en déduction de leur actif brut, comme dans une vraie liasse fiscale.</p>
+                    <div id="bilan-actif-container"></div>
+                    <div class="financial-line total-line" style="margin-top:10px;"><span>TOTAL ACTIF :</span><span><span id="total-actif">0</span> €</span></div>
+                </div>
+            </div>
+            <div class="panel-right">
+                <div class="card" style="background: var(--bg-inset);">
+                    <h2 style="font-family:var(--font-display); color: var(--credit-blue); margin-bottom:20px; font-size:17px; font-weight:600; visibility:hidden;">.</h2>
+                    <div id="bilan-passif-container"></div>
+                    <div class="financial-line total-line" style="margin-top:10px;"><span>TOTAL PASSIF :</span><span><span id="total-passif">0</span> €</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="background: var(--bg-inset);">
+            <h2 style="font-family:var(--font-display); color: var(--gold-bright); margin-bottom:20px; font-size:17px; font-weight:600;">📊 COMPTE DE RÉSULTAT <span class="tab-heading-sub">— Performance de la Période</span></h2>
+            <div class="grid-2">
+                <div>
+                    <h4 class="rubrique-title" style="color: var(--debit-red-bright); border-bottom-color: rgba(193,80,61,0.2);">Charges (Classe 6)</h4>
+                    <div id="charges-list"></div>
+                    <div class="financial-line total-line" style="background:rgba(193,80,61,0.15);"><span>Total Charges :</span><span><span id="total-charges">0</span> €</span></div>
+                </div>
+                <div>
+                    <h4 class="rubrique-title" style="color: var(--gold-bright); border-bottom-color: rgba(201,162,39,0.2);">Produits (Classe 7)</h4>
+                    <div id="produits-list"></div>
+                    <div class="financial-line total-line" style="background:rgba(201,162,39,0.15);"><span>Total Produits :</span><span><span id="total-produits">0</span> €</span></div>
+                </div>
+            </div>
+            <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
+            <div class="financial-line" style="font-size:15px; font-weight:bold; background:var(--bg-card-raised); padding:13px;">
+                <span>📈 Résultat Net de l'exercice :</span><span><span id="resultat-net">0</span> €</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TAB: ANALYSE ============ -->
+    <div class="tab-panel" id="tab-analyse">
+        <div class="card">
+            <h2 class="tab-heading">📈 Rapport d'Analyse Financière</h2>
+            <p class="tab-desc">Au-delà de produire des chiffres, un comptable les interprète. Voici ce que révèlent vos comptes à ce stade de l'exercice.</p>
+            <div id="ratios-container" class="ratio-grid"></div>
+        </div>
+
+        <div class="card" style="background: var(--bg-inset);">
+            <h2 class="tab-heading" style="color:var(--credit-blue);">💧 Tableau de Flux de Trésorerie <span class="tab-heading-sub">— Méthode Indirecte Simplifiée</span></h2>
+            <p class="tab-desc">Modèle pédagogique : reconstitue votre trésorerie à partir du résultat, sans le détail complet des cessions d'actifs qu'exigerait une vraie liasse professionnelle.</p>
+            <div id="cashflow-container"></div>
+        </div>
+
+        <div class="card" id="ca3-card" style="display:none;">
+            <h2 class="tab-heading" style="color:var(--gold-bright);">🧾 Aperçu Déclaration de TVA <span class="tab-heading-sub">— Logique CA3</span></h2>
+            <p class="tab-desc">Reconstitution simplifiée des lignes clés d'une déclaration CA3 à partir de vos comptes de TVA mouvementés.</p>
+            <div id="ca3-container"></div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/accounts.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
