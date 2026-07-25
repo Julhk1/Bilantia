@@ -1,0 +1,429 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   EXPERTCOMPTA — DESIGN SYSTEM "GRAND LIVRE"
+   Palette: encre de bilan (vert forêt profond) + sceau doré
+   Serif éditoriale pour les titres, mono pour tous les chiffres
+   ============================================================ */
+
+:root {
+    /* Surfaces */
+    --bg-void: #0a120f;
+    --bg-main: #0d1613;
+    --bg-card: #131f1a;
+    --bg-card-raised: #182620;
+    --bg-inset: #0a1512;
+    --border-color: #24352c;
+    --border-soft: #1c2820;
+
+    /* Text */
+    --text-main: #f3ede0;
+    --text-muted: #93a89b;
+    --text-faint: #5b6d62;
+    --paper: #f3ede0;
+
+    /* Accents */
+    --gold: #c9a227;
+    --gold-bright: #e8c766;
+    --gold-dim: #8a7326;
+    --emerald: #2fa876;
+    --emerald-bright: #4bd39a;
+    --emerald-deep: #123527;
+    --debit-red: #c1503d;
+    --debit-red-bright: #e2725c;
+    --credit-blue: #4d8fd1;
+
+    --gradient-seal: linear-gradient(135deg, #e8c766 0%, #c9a227 55%, #a1801d 100%);
+    --gradient-emerald: linear-gradient(135deg, #4bd39a 0%, #2fa876 100%);
+    --gradient-vault: linear-gradient(180deg, #131f1a 0%, #0d1613 100%);
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --shadow-card: 0 12px 32px rgba(0,0,0,0.35);
+    --shadow-gold: 0 8px 24px rgba(201,162,39,0.25);
+    --shadow-emerald: 0 8px 24px rgba(47,168,118,0.22);
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Public Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-void);
+    background-image:
+        radial-gradient(ellipse 900px 500px at 15% -10%, rgba(47,168,118,0.10), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 100% 0%, rgba(201,162,39,0.07), transparent 55%);
+    color: var(--text-main);
+    margin: 0; padding: 0;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+}
+
+.container { max-width: 1400px; margin: 0 auto; padding: 25px; }
+
+::selection { background: rgba(201,162,39,0.35); color: var(--text-main); }
+
+/* Scrollbar, subtle */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(19,31,26,0.92) 0%, rgba(13,22,19,0.92) 100%);
+    backdrop-filter: blur(14px);
+    padding: 18px 28px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+}
+header::before {
+    content: "";
+    position: absolute; top: 0; left: 24px; right: 24px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent);
+}
+
+.header-right-block { display: flex; align-items: center; gap: 18px !important; }
+
+.xp-container { display: flex; flex-direction: column; justify-content: center; }
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.logo::before {
+    content: "◈";
+    color: var(--gold);
+    font-size: 18px;
+}
+.mission-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 25px; }
+@media (max-width: 1150px) { .grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   CARDS — "feuillets de grand livre"
+   ============================================================ */
+.card {
+    background:
+        repeating-linear-gradient(180deg, transparent, transparent 27px, rgba(201,162,39,0.035) 28px),
+        var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+.card::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--gradient-emerald);
+    opacity: 0.55;
+}
+
+.module-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    position: relative;
+    box-shadow: var(--shadow-card);
+    transition: all 0.25s ease;
+}
+.module-card:hover:not(.locked) { border-color: var(--gold-dim); transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+.module-card.locked { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.4); }
+
+.module-card h3 {
+    font-family: var(--font-display);
+    margin-top: 0;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 12px;
+    padding-right: 120px;
+    line-height: 1.35;
+}
+.module-card p { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 22px; padding-right: 8px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { margin-bottom: 15px; }
+label {
+    display: block; font-weight: 600; font-size: 11px; color: var(--gold-bright);
+    margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.8px;
+    font-family: var(--font-mono);
+}
+
+select, input[type="number"] {
+    width: 100%; padding: 12px 14px; background-color: var(--bg-inset); border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm); color: var(--text-main); box-sizing: border-box; font-size: 14px; font-weight: 500;
+    font-family: var(--font-mono);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+select:focus, input[type="number"]:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,162,39,0.15); }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-main {
+    background: var(--gradient-seal); color: #1a1406; border: none;
+    padding: 14px 20px; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; cursor: pointer; width: 100%;
+    box-shadow: var(--shadow-gold); transition: all 0.2s ease;
+    font-family: var(--font-body);
+    letter-spacing: 0.2px;
+}
+.btn-main:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(201,162,39,0.4); filter: brightness(1.05); }
+.btn-main:active { transform: translateY(0); }
+
+.btn-secondary {
+    background: var(--bg-card-raised); border: 1px solid var(--border-color); color: var(--text-main);
+    padding: 9px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover { background: #203026; border-color: var(--gold-dim); }
+
+.btn-danger {
+    background: rgba(193,80,61,0.12); border: 1px solid rgba(193,80,61,0.3); color: var(--debit-red-bright);
+    padding: 5px 9px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;
+}
+.btn-danger:hover { background: var(--debit-red); color: white; }
+
+.error-box {
+    background: rgba(193,80,61,0.1); border: 1px solid rgba(193,80,61,0.3); color: #f0ada0;
+    padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 13.5px; display: none;
+    display: none; align-items: center; gap: 10px;
+}
+.error-box.visible { display: flex; }
+
+.financial-line {
+    display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 9px 13px;
+    background: rgba(10,21,18,0.5); border-radius: 6px; margin-bottom: 6px; border-left: 3px solid transparent;
+    font-family: var(--font-mono);
+}
+.financial-line span:first-child { font-family: var(--font-body); color: var(--text-muted); }
+.financial-line strong { color: var(--text-main); font-weight: 600; }
+
+/* ============================================================
+   BILAN SUB-TITLES
+   ============================================================ */
+.title-actif, .title-passif {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+.title-actif { color: var(--emerald-bright); border-bottom: 2px solid rgba(47,168,118,0.2); }
+.title-passif { color: #7fb1e8; border-bottom: 2px solid rgba(77,143,209,0.2); }
+
+#actif-list .financial-line { border-left-color: var(--emerald); }
+#passif-list .financial-line { border-left-color: var(--credit-blue); }
+#charges-list .financial-line { border-left-color: var(--debit-red); }
+#produits-list .financial-line { border-left-color: var(--gold); }
+
+/* ============================================================
+   LEDGER TABLE — double-entry look, red/green ink convention
+   ============================================================ */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 10px; border-bottom: 1px solid var(--border-soft); font-size: 13px; text-align: left; }
+th {
+    color: var(--text-faint); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.7px;
+    font-family: var(--font-mono); font-weight: 600;
+}
+th:nth-child(2) { color: var(--debit-red-bright); border-right: 1px solid var(--border-soft); }
+th:nth-child(3) { color: var(--emerald-bright); }
+td:nth-child(2), td:nth-child(3) { font-family: var(--font-mono); }
+td:nth-child(2) { border-right: 1px solid var(--border-soft); color: var(--debit-red-bright); }
+td:nth-child(3) { color: var(--emerald-bright); }
+td strong { color: var(--gold-bright); font-family: var(--font-mono); font-weight: 600; }
+
+/* ============================================================
+   XP / PROGRESS
+   ============================================================ */
+.xp-text {
+    font-size: 10.5px; font-weight: 700; color: var(--gold-bright); text-align: left; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.7px; font-family: var(--font-mono);
+}
+.xp-bar-container { width: 150px; height: 7px; background: var(--bg-inset); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+.xp-bar { width: 0%; height: 100%; background: var(--gradient-seal); border-radius: 10px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+
+.lock-badge {
+    position: absolute; top: 20px; right: 20px; background: #202b25; color: var(--text-faint);
+    padding: 5px 11px; border-radius: 20px; font-size: 10.5px; font-weight: 700; border: 1px solid var(--border-color);
+    font-family: var(--font-mono); letter-spacing: 0.3px; text-transform: uppercase;
+}
+.unlocked-badge {
+    position: absolute; top: 20px; right: 20px; background: rgba(201,162,39,0.13); color: var(--gold-bright);
+    padding: 5px 11px; border-radius: 20px; font-size: 10.5px; font-weight: 700; border: 1px solid rgba(201,162,39,0.35);
+    font-family: var(--font-mono); letter-spacing: 0.3px; text-transform: uppercase;
+}
+
+/* ============================================================
+   SUCCESS PANEL — stamped certificate feel
+   ============================================================ */
+.success-card {
+    background:
+        radial-gradient(circle at 90% -10%, rgba(201,162,39,0.14), transparent 55%),
+        linear-gradient(135deg, rgba(47,168,118,0.12) 0%, rgba(18,53,39,0.15) 100%);
+    border: 1px solid rgba(201,162,39,0.35);
+    color: var(--paper);
+    animation: slideUp 0.4s ease;
+}
+.success-card h3 {
+    font-family: var(--font-display); font-weight: 700; color: var(--gold-bright); font-size: 19px; margin-top: 0;
+    display: flex; align-items: center; gap: 8px;
+}
+@keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.tab-nav {
+    display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap;
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+    padding: 6px;
+}
+.tab-btn {
+    flex: 1; min-width: 120px; background: transparent; border: none; color: var(--text-muted);
+    padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-body); transition: all 0.2s ease;
+}
+.tab-btn:hover { background: var(--bg-card-raised); color: var(--text-main); }
+.tab-btn.active { background: var(--gradient-seal); color: #1a1406; box-shadow: var(--shadow-gold); }
+
+.tab-panel { display: none; animation: slideUp 0.3s ease; }
+.tab-panel.active { display: block; }
+
+.tab-heading {
+    font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--text-main);
+    margin-bottom: 8px;
+}
+.tab-heading-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); font-weight: 400; text-transform: uppercase; }
+.tab-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 22px; max-width: 760px; }
+.empty-state { color: var(--text-faint); font-size: 13px; font-style: italic; padding: 20px 0; }
+
+/* ============================================================
+   PIÈCE STRIP (date + numéro de pièce)
+   ============================================================ */
+.piece-strip {
+    display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-faint); margin-bottom: 12px; letter-spacing: 0.3px;
+}
+.piece-strip span { background: var(--bg-inset); border: 1px solid var(--border-soft); padding: 4px 10px; border-radius: 20px; }
+.factor-tag { color: var(--gold-bright) !important; border-color: rgba(201,162,39,0.35) !important; }
+
+.account-hint { font-size: 11.5px; color: var(--text-faint); margin-top: 6px; min-height: 14px; font-family: var(--font-mono); }
+
+/* ============================================================
+   GRAND LIVRE
+   ============================================================ */
+.ledger-account {
+    border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 16px; overflow: hidden;
+    background: var(--bg-inset);
+}
+.ledger-account-header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-card-raised);
+    flex-wrap: wrap;
+}
+.ledger-code { font-family: var(--font-mono); color: var(--gold-bright); font-weight: 700; font-size: 13px; }
+.ledger-label { flex: 1; font-size: 13px; color: var(--text-main); }
+.ledger-solde { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.ledger-solde.debit { color: var(--debit-red-bright); background: rgba(193,80,61,0.1); }
+.ledger-solde.credit { color: var(--emerald-bright); background: rgba(47,168,118,0.1); }
+
+.ledger-table { width: 100%; }
+.ledger-table th { background: transparent; padding: 6px 16px; }
+.ledger-table td { padding: 6px 16px; border-bottom: 1px dashed var(--border-soft); font-family: var(--font-mono); font-size: 12.5px; }
+.ledger-table td:first-child { color: var(--debit-red-bright); }
+.ledger-table td:last-child { color: var(--emerald-bright); }
+.ledger-table tfoot td { border-top: 2px solid var(--border-color); border-bottom: none; font-weight: 700; color: var(--text-main); }
+
+/* ============================================================
+   BALANCE GÉNÉRALE
+   ============================================================ */
+.balance-table { width: 100%; font-size: 12.5px; }
+.balance-table th { font-family: var(--font-mono); }
+.balance-table td { font-family: var(--font-mono); }
+.balance-table td:first-child { font-family: var(--font-body); }
+.balance-table tfoot td { border-top: 2px solid var(--gold-dim); font-weight: 700; color: var(--gold-bright); }
+.balance-check {
+    margin-top: 16px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+    font-family: var(--font-mono);
+}
+.balance-check.ok { background: rgba(47,168,118,0.12); color: var(--emerald-bright); border: 1px solid rgba(47,168,118,0.3); }
+.balance-check.error { background: rgba(193,80,61,0.12); color: var(--debit-red-bright); border: 1px solid rgba(193,80,61,0.3); }
+
+/* ============================================================
+   BILAN — RUBRIQUES
+   ============================================================ */
+.rubrique-block { margin-bottom: 20px; }
+.rubrique-title {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--text-muted); padding-bottom: 6px; border-bottom: 1px solid var(--border-soft); margin-bottom: 10px;
+    font-weight: 600;
+}
+.rubrique-subtotal { border-left: none !important; background: var(--bg-card-raised) !important; font-weight: 700; margin-top: 4px; }
+.total-line { font-weight: bold; border-left: none; background: rgba(201,162,39,0.1); }
+
+/* ============================================================
+   ANALYSE — RATIOS
+   ============================================================ */
+.ratio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.ratio-card {
+    background: var(--bg-inset); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+    padding: 18px;
+}
+.ratio-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold-bright); margin-bottom: 8px; }
+.ratio-value { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+.ratio-formula { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); margin-bottom: 8px; }
+.ratio-interp { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+/* ============================================================
+   ANALYSE — CASHFLOW & CA3
+   ============================================================ */
+.cashflow-line { display: flex; justify-content: space-between; padding: 8px 4px; font-size: 13.5px; }
+.cashflow-line.sub { font-size: 11.5px; color: var(--text-faint); padding-top: 0; margin-bottom: 6px; }
+.cashflow-line.total { font-weight: 600; border-top: 1px solid var(--border-soft); }
+.cashflow-line.grand-total { font-weight: 700; font-family: var(--font-mono); color: var(--credit-blue); }
+.cashflow-check { margin-top: 14px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; }
+.cashflow-check.ok { background: rgba(47,168,118,0.12); color: var(--emerald-bright); }
+.cashflow-check.warn { background: rgba(201,162,39,0.12); color: var(--gold-bright); }
+
+.ca3-line { display: flex; justify-content: space-between; padding: 9px 4px; font-size: 13.5px; font-family: var(--font-mono); border-bottom: 1px dashed var(--border-soft); }
+.ca3-line.total { font-weight: 700; color: var(--gold-bright); border-bottom: none; border-top: 2px solid var(--gold-dim); margin-top: 4px; padding-top: 12px; }
