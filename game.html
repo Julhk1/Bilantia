@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilantia — Simulateur d'Écriture</title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/theme.js"></script>
 </head>
 <body>
 
@@ -15,8 +16,9 @@
             <div id="module-title" class="mission-subtitle">Initialisation du cours...</div>
         </div>
         <div class="header-right-block">
+            <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">☀️ Mode clair</button>
             <button onclick="window.location.href='index.html'" class="btn-secondary">← Menu</button>
-            <button onclick="skipStepTesting()" class="btn-secondary" style="background:rgba(201,162,39,0.08); color:var(--gold-bright); border-color:rgba(201,162,39,0.3);" title="Outil de test : remplit l'écriture attendue automatiquement">⏩ Test</button>
+            <button onclick="revealAnswer()" class="btn-secondary" style="background:rgba(201,162,39,0.08); color:var(--gold-bright); border-color:rgba(201,162,39,0.3);" title="Remplit l'écriture attendue si vous êtes bloqué">💡 Je veux la réponse</button>
             <div class="xp-container">
                 <div class="xp-text">Score : <span id="xp-display">100</span> XP</div>
                 <div class="xp-bar-container"><div class="xp-bar" id="xp-bar"></div></div>
@@ -82,11 +84,6 @@
                 <div class="card success-card" id="success-panel" style="display:none;">
                     <h3>🏆 Écriture Validée par l'Expert !</h3>
                     <p id="success-explanation" style="font-size:14px; line-height:1.65; margin:15px 0; color:#cfe8da;"></p>
-
-                    <button onclick="genererLiasseFiscalePDF()" class="btn-secondary" style="background:var(--credit-blue); color:#08131f; width:100%; margin-bottom:12px; border:none; padding:14px; font-weight:700; border-radius:var(--radius-sm); box-shadow:0 6px 16px rgba(77,143,209,0.3); cursor:pointer;">
-                        📥 Exporter la Liasse (PDF)
-                    </button>
-
                     <button onclick="nextStep()" class="btn-main" style="background:var(--gradient-emerald); color:#08150f; box-shadow:var(--shadow-emerald);">Étape Suivante ➡️</button>
                 </div>
 
@@ -183,6 +180,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <script src="js/accounts.js"></script>
 <script src="js/scenarios.js"></script>
 <script src="js/app.js"></script>
