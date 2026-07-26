@@ -18,7 +18,7 @@
         <div class="header-right-block">
             <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">☀️ Mode clair</button>
             <button onclick="window.location.href='index.html'" class="btn-secondary">← Menu</button>
-            <button onclick="revealAnswer()" class="btn-secondary" style="background:rgba(201,162,39,0.08); color:var(--gold-bright); border-color:rgba(201,162,39,0.3);" title="Remplit l'écriture attendue si vous êtes bloqué">💡 Je veux la réponse</button>
+            <button onclick="revealAnswer()" class="btn-secondary" style="background:rgba(201,162,39,0.1); color:#e8c766; border-color:rgba(201,162,39,0.35);" title="Remplit l'écriture attendue si vous êtes bloqué">💡 Je veux la réponse</button>
             <div class="xp-container">
                 <div class="xp-text">Score : <span id="xp-display">100</span> XP</div>
                 <div class="xp-bar-container"><div class="xp-bar" id="xp-bar"></div></div>
@@ -41,7 +41,7 @@
             <div class="panel-left">
                 <div class="card" style="border-left: 4px solid var(--gold);">
                     <h2 id="step-title" style="font-family:var(--font-display); color:var(--gold-bright); font-size:19px; font-weight:600; margin-bottom:12px;">Concepts Théoriques</h2>
-                    <div id="step-theory" style="font-size: 14.5px; line-height: 1.7; color: #cdd8d0;"></div>
+                    <div id="step-theory" style="font-size: 14.5px; line-height: 1.7; color: var(--text-muted);"></div>
                 </div>
 
                 <div class="card" style="background: var(--bg-inset);">
@@ -83,7 +83,7 @@
             <div class="panel-right">
                 <div class="card success-card" id="success-panel" style="display:none;">
                     <h3>🏆 Écriture Validée par l'Expert !</h3>
-                    <p id="success-explanation" style="font-size:14px; line-height:1.65; margin:15px 0; color:#cfe8da;"></p>
+                    <p id="success-explanation" style="font-size:14px; line-height:1.65; margin:15px 0; color:var(--text-main);"></p>
                     <button onclick="nextStep()" class="btn-main" style="background:var(--gradient-emerald); color:#08150f; box-shadow:var(--shadow-emerald);">Étape Suivante ➡️</button>
                 </div>
 
