@@ -34,6 +34,7 @@ const chartOfAccounts = {
     "2805": { label: "Amortissements des Concessions/Brevets", cls: 2, rubrique: "immo", contra: true },
     "2813": { label: "Amortissements des Constructions", cls: 2, rubrique: "immo", contra: true },
     "2815": { label: "Amortissements du Matériel", cls: 2, rubrique: "immo", contra: true },
+    "2818": { label: "Amortissements des Autres Immobilisations Corporelles", cls: 2, rubrique: "immo", contra: true },
     "296": { label: "Dépréciation des Titres de Participation", cls: 2, rubrique: "immo", contra: true },
 
     // ---- CLASSE 3 : STOCKS ----
