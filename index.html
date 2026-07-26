@@ -6,6 +6,7 @@
     <title>Bilantia | Académie de Compétences Comptables</title>
     <meta name="description" content="Apprenez la comptabilité en passant de vraies écritures, pas en lisant des slides. Journal, Grand Livre, Balance, Bilan normé et analyse financière — comme en cabinet.">
     <link rel="stylesheet" href="style.css">
+    <script src="js/theme.js"></script>
     <style>
         body { padding: 20px; box-sizing: border-box; }
         .hub-container { max-width: 1020px; width: 100%; margin: 0 auto; }
@@ -70,11 +71,17 @@
         }
         .certificate-note strong { color: var(--gold-bright); }
 
+        .hub-topbar { display: flex; justify-content: flex-end; margin-bottom: 18px; }
+
         footer.hub-footer { text-align: center; margin: 40px 0 20px; color: var(--text-faint); font-size: 12px; font-family: var(--font-mono); }
     </style>
 </head>
 <body>
     <div class="hub-container" style="animation: slideUp 0.5s ease;">
+
+        <div class="hub-topbar">
+            <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">☀️ Mode clair</button>
+        </div>
 
         <div class="hero">
             <div class="hero-eyebrow">Académie de compétences comptables</div>
@@ -173,7 +180,7 @@
             window.location.href = 'game.html';
         }
 
-        window.onload = renderHub;
+        window.onload = function () { renderHub(); initThemeToggleLabel(); };
     </script>
 </body>
 </html>
