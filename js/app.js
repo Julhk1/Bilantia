@@ -113,6 +113,7 @@ function initGame() {
     if (!gameState.stepFactor) gameState.stepFactor = rollFactor();
     populateAccountDatalist();
     setupTabs();
+    initThemeToggleLabel();
     const accountInput = document.getElementById('account-input');
     if (accountInput) {
         accountInput.addEventListener('input', function () {
@@ -132,15 +133,27 @@ function renderUI() {
 
     if (!stepData) {
         let currentLevel = parseInt(localStorage.getItem('bt_highest_level')) || 1;
+        let justCompleted = false;
         if (currentModule.startsWith('mod')) {
             const modNumber = parseInt(currentModule.replace('mod', ''));
             if (modNumber === currentLevel) {
                 localStorage.setItem('bt_highest_level', modNumber + 1);
+                justCompleted = true;
             }
         }
+        saveModuleSnapshot();
+
+        const allCoreDone = ['mod1', 'mod2', 'mod3', 'mod4', 'mod5'].every(m => !!localStorage.getItem('bt_snapshot_' + m));
+
         document.getElementById('module-title').innerText = "Certificat validé !";
         document.getElementById('step-title').innerText = "🏆 Niveau Validé !";
-        document.getElementById('step-theory').innerHTML = `<p>Tu as validé avec succès l'ensemble du programme pratique de cette section.</p><br><button onclick="exitToMenu()" class="btn-main">Retourner au catalogue</button>`;
+        document.getElementById('step-theory').innerHTML = `
+            <p>Tu as validé avec succès l'ensemble du programme pratique de cette section.</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button onclick="genererLiasseModule()" class="btn-secondary" style="background:var(--credit-blue); color:#08131f; border:none; padding:14px; font-weight:700; border-radius:var(--radius-sm); cursor:pointer;">📥 Télécharger la Liasse Fiscale Officielle de ce Module</button>
+                ${allCoreDone ? `<button onclick="genererLiasseCursus()" class="btn-main" style="background:var(--gradient-seal);">🎓 Télécharger la Liasse Complète du Cursus + Certificat</button>` : ''}
+                <button onclick="exitToMenu()" class="btn-main">Retourner au catalogue</button>
+            </div>`;
         document.getElementById('exercise-instruction').innerText = "Session terminée — consultez votre rapport d'analyse ci-dessus avant de repartir.";
         document.getElementById('account-input').value = '';
         document.getElementById('piece-strip').innerHTML = '';
@@ -695,90 +708,229 @@ function checkSuccess() {
 }
 
 /* ============================================================
-   PDF — LIASSE FISCALE
+   LIASSE FISCALE — Format officiel (inspiré CERFA 2050/2051/2052)
    ============================================================ */
 
-function genererLiasseFiscalePDF() {
+const MODULE_DISPLAY_NAMES = {
+    mod1: "Module 1 — Fondations Comptables (L1)",
+    mod2: "Module 2 — Comptabilité Générale (L2)",
+    mod3: "Module 3 — Comptabilité Approfondie (L3/M1)",
+    mod4: "Module 4 — Fiscalité des Sociétés (M2)",
+    mod5: "Module 5 — Gestion Sociale & Paie (M2)",
+    boulangerie: "Cas Pratique — L'Artisan Boulanger",
+    saas: "Cas Pratique — L'Éditeur SaaS",
+    industrie: "Cas Pratique — Le Groupe Industriel"
+};
+
+function saveModuleSnapshot() {
+    const agg = computeAggregates();
+    const totalActif = agg.immo + agg.circulant + agg.tresorerieActif;
+    const totalPassif = agg.capitaux + agg.resultatNet + agg.provisions + agg.dettesFinancieres + agg.dettesExploitation + agg.tresoreriePassif;
+    const snapshot = {
+        module: currentModule,
+        label: MODULE_DISPLAY_NAMES[currentModule] || currentModule,
+        date: new Date().toLocaleDateString('fr-FR'),
+        agg, totalActif, totalPassif
+    };
+    localStorage.setItem('bt_snapshot_' + currentModule, JSON.stringify(snapshot));
+}
+
+function addLiassePages(doc, label, agg, dateStr, isFirstPage) {
+    const totalActif = agg.immo + agg.circulant + agg.tresorerieActif;
+    const totalPassif = agg.capitaux + agg.resultatNet + agg.provisions + agg.dettesFinancieres + agg.dettesExploitation + agg.tresoreriePassif;
+
+    if (!isFirstPage) doc.addPage();
+
+    // --- En-tête de section ---
+    doc.setFillColor(15, 22, 19);
+    doc.rect(0, 0, 210, 26, 'F');
+    doc.setTextColor(232, 199, 102);
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("BILANTIA", 15, 12);
+    doc.setFontSize(9);
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor(255, 255, 255);
+    doc.text(label, 15, 20);
+    doc.setFontSize(8);
+    doc.text(`Édité le ${dateStr}`, 195, 12, { align: 'right' });
+    doc.text("Réf. Cerfa 2050/2051/2052 (adapté)", 195, 20, { align: 'right' });
+
+    let y = 36;
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(11);
+    doc.setFont("Helvetica", "bold");
+    doc.text("BILAN — ACTIF", 15, y);
+    y += 4;
+
+    const actifRows = [];
+    agg.byRubrique.immo.forEach(i => actifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    agg.byRubrique.circulant.forEach(i => actifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    agg.byRubrique.tresorerie_actif.forEach(i => actifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    if (actifRows.length === 0) actifRows.push(["—", "Aucun mouvement", "0 €"]);
+
+    doc.autoTable({
+        startY: y,
+        head: [["Compte", "Poste (Actif)", "Montant Net"]],
+        body: actifRows,
+        foot: [["", "TOTAL ACTIF", formatFR(totalActif) + " €"]],
+        theme: 'grid',
+        headStyles: { fillColor: [19, 31, 26], textColor: [232, 199, 102], fontStyle: 'bold', fontSize: 9 },
+        footStyles: { fillColor: [239, 230, 209], textColor: [15, 23, 42], fontStyle: 'bold', fontSize: 9 },
+        bodyStyles: { fontSize: 8.5, textColor: [30, 30, 30] },
+        columnStyles: { 0: { cellWidth: 22 }, 2: { cellWidth: 35, halign: 'right' } },
+        margin: { left: 15, right: 15 }
+    });
+
+    y = doc.lastAutoTable.finalY + 10;
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text("BILAN — PASSIF", 15, y);
+    y += 4;
+
+    const passifRows = [];
+    agg.byRubrique.capitaux.forEach(i => passifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    if (agg.resultatNet !== 0) passifRows.push([agg.resultatNet >= 0 ? "120" : "129", agg.resultatNet >= 0 ? "Bénéfice de l'exercice" : "Perte de l'exercice", formatFR(agg.resultatNet) + " €"]);
+    agg.byRubrique.provisions.forEach(i => passifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    agg.byRubrique.dettes_financieres.forEach(i => passifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    agg.byRubrique.dettes_exploitation.forEach(i => passifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    agg.byRubrique.tresorerie_passif.forEach(i => passifRows.push([i.code, i.label, formatFR(i.solde) + " €"]));
+    if (passifRows.length === 0) passifRows.push(["—", "Aucun mouvement", "0 €"]);
+
+    doc.autoTable({
+        startY: y,
+        head: [["Compte", "Poste (Passif)", "Montant"]],
+        body: passifRows,
+        foot: [["", "TOTAL PASSIF", formatFR(totalPassif) + " €"]],
+        theme: 'grid',
+        headStyles: { fillColor: [19, 31, 26], textColor: [232, 199, 102], fontStyle: 'bold', fontSize: 9 },
+        footStyles: { fillColor: [239, 230, 209], textColor: [15, 23, 42], fontStyle: 'bold', fontSize: 9 },
+        bodyStyles: { fontSize: 8.5, textColor: [30, 30, 30] },
+        columnStyles: { 0: { cellWidth: 22 }, 2: { cellWidth: 35, halign: 'right' } },
+        margin: { left: 15, right: 15 }
+    });
+
+    y = doc.lastAutoTable.finalY + 10;
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text("COMPTE DE RÉSULTAT", 15, y);
+    y += 4;
+
+    const chargesRows = [], produitsRows = [];
+    for (const code in gameState.balances) {
+        const b = gameState.balances[code];
+        const meta = chartOfAccounts[code];
+        if (!meta) continue;
+        if (meta.cls === 6) { const s = b.debit - b.credit; if (s !== 0) chargesRows.push([code, meta.label, formatFR(s) + " €"]); }
+        if (meta.cls === 7) { const s = b.credit - b.debit; if (s !== 0) produitsRows.push([code, meta.label, formatFR(s) + " €"]); }
+    }
+    const crRows = [
+        ...produitsRows.map(r => ["Produit", ...r]),
+        ...chargesRows.map(r => ["Charge", ...r])
+    ];
+    if (crRows.length === 0) crRows.push(["—", "—", "Aucun mouvement", "0 €"]);
+
+    doc.autoTable({
+        startY: y,
+        head: [["Nature", "Compte", "Libellé", "Montant"]],
+        body: crRows,
+        foot: [
+            ["", "", "Total Produits", formatFR(agg.produits) + " €"],
+            ["", "", "Total Charges", formatFR(agg.charges) + " €"],
+            ["", "", "RÉSULTAT NET", formatFR(agg.resultatNet) + " €"]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [19, 31, 26], textColor: [232, 199, 102], fontStyle: 'bold', fontSize: 9 },
+        footStyles: { fillColor: [239, 230, 209], textColor: [15, 23, 42], fontStyle: 'bold', fontSize: 9 },
+        bodyStyles: { fontSize: 8.5, textColor: [30, 30, 30] },
+        columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 20 }, 3: { cellWidth: 35, halign: 'right' } },
+        margin: { left: 15, right: 15 }
+    });
+
+    doc.setFontSize(7);
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor(120, 120, 120);
+    doc.text("Document pédagogique inspiré de la présentation des formulaires CERFA n°2050 à 2052 — usage exclusivement académique, non opposable à l'administration fiscale.", 15, 290);
+}
+
+function genererLiasseModule() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    const agg = computeAggregates();
+    const label = MODULE_DISPLAY_NAMES[currentModule] || currentModule;
+    const dateStr = new Date().toLocaleDateString('fr-FR');
+    addLiassePages(doc, label, agg, dateStr, true);
+    doc.save(`Liasse_Fiscale_${currentModule}.pdf`);
+}
 
+function genererLiasseCursus() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const dateStr = new Date().toLocaleDateString('fr-FR');
+    const coreModules = ['mod1', 'mod2', 'mod3', 'mod4', 'mod5'];
+    const snapshots = coreModules.map(m => {
+        try { return JSON.parse(localStorage.getItem('bt_snapshot_' + m)); } catch (e) { return null; }
+    }).filter(Boolean);
+
+    // --- Page de certificat ---
     doc.setFillColor(15, 22, 19);
-    doc.rect(0, 0, 210, 40, 'F');
+    doc.rect(0, 0, 210, 297, 'F');
+    doc.setDrawColor(201, 162, 39);
+    doc.setLineWidth(1.2);
+    doc.rect(10, 10, 190, 277);
+    doc.setLineWidth(0.4);
+    doc.rect(14, 14, 182, 269);
 
     doc.setTextColor(232, 199, 102);
     doc.setFont("Helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("BILANTIA — LIASSE FISCALE", 15, 20);
+    doc.setFontSize(12);
+    doc.text("BILANTIA", 105, 50, { align: 'center' });
+    doc.setFontSize(10);
+    doc.setTextColor(200, 200, 200);
+    doc.text("ACADÉMIE DE COMPÉTENCES COMPTABLES", 105, 58, { align: 'center' });
 
     doc.setTextColor(255, 255, 255);
+    doc.setFontSize(28);
+    doc.setFont("Helvetica", "bold");
+    doc.text("Certificat Bilantia", 105, 100, { align: 'center' });
+    doc.setFontSize(14);
+    doc.setTextColor(232, 199, 102);
+    doc.text("de Praticien Comptable", 105, 112, { align: 'center' });
+
+    doc.setTextColor(220, 220, 220);
+    doc.setFontSize(11);
     doc.setFont("Helvetica", "normal");
+    doc.text("Ce certificat atteste de la réalisation complète du cursus pratique", 105, 135, { align: 'center' });
+    doc.text("couvrant le cycle comptable, de la saisie au journal jusqu'à l'analyse financière.", 105, 143, { align: 'center' });
+
+    let ly = 165;
     doc.setFontSize(10);
-    doc.text("Formulaire de synthèse pédagogique — Conforme aux normes du PCG", 15, 32);
-
-    const totalActif = document.getElementById('total-actif').innerText + " €";
-    const totalPassif = document.getElementById('total-passif').innerText + " €";
-    const totalCharges = document.getElementById('total-charges').innerText + " €";
-    const totalProduits = document.getElementById('total-produits').innerText + " €";
-    const resultatNet = document.getElementById('resultat-net').innerText + " €";
-    const moduleName = currentModule.toUpperCase();
-
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12);
-    doc.setFont("Helvetica", "bold");
-    doc.text(`CURSUS : ${moduleName} - ÉTAPE ${gameState.step}`, 15, 55);
+    doc.setTextColor(232, 199, 102);
+    doc.text("Modules validés :", 60, ly);
+    ly += 8;
+    doc.setTextColor(230, 230, 230);
     doc.setFont("Helvetica", "normal");
-    doc.text(`Date d'exportation : ${new Date().toLocaleDateString()}`, 130, 55);
+    snapshots.forEach(s => {
+        doc.text(`✓  ${s.label}`, 65, ly);
+        ly += 7;
+    });
 
-    doc.setFillColor(241, 245, 249);
-    doc.rect(15, 65, 180, 8, 'F');
-    doc.setFont("Helvetica", "bold");
-    doc.text("⚖️ BILAN COMPTABLE SIMPLIFIÉ (Patrimoine)", 18, 71);
-
-    doc.setFont("Helvetica", "normal");
-    doc.rect(15, 73, 180, 30);
-    doc.line(105, 73, 105, 103);
-
-    doc.text("TOTAL ACTIF (Emplois) :", 18, 85);
-    doc.setFont("Helvetica", "bold");
-    doc.text(totalActif, 70, 85);
-
-    doc.setFont("Helvetica", "normal");
-    doc.text("TOTAL PASSIF (Ressources) :", 108, 85);
-    doc.setFont("Helvetica", "bold");
-    doc.text(totalPassif, 165, 85);
-
-    doc.setFillColor(241, 245, 249);
-    doc.rect(15, 115, 180, 8, 'F');
-    doc.setFont("Helvetica", "bold");
-    doc.text("📊 COMPTE DE RÉSULTAT (Activité de la période)", 18, 121);
-
-    doc.setFont("Helvetica", "normal");
-    doc.rect(15, 123, 180, 45);
-    doc.line(15, 138, 195, 138);
-    doc.line(15, 153, 195, 153);
-
-    doc.text("Total des Charges (Classe 6) :", 18, 132);
-    doc.text(totalCharges, 150, 132);
-
-    doc.text("Total des Produits (Classe 7) :", 18, 147);
-    doc.text(totalProduits, 150, 147);
-
-    doc.setFont("Helvetica", "bold");
-    doc.setTextColor(31, 138, 95);
-    doc.text("RÉSULTAT NET DE L'EXERCICE :", 18, 162);
-    doc.text(resultatNet, 150, 162);
-
-    doc.rect(120, 185, 75, 30);
-    doc.setTextColor(100, 116, 139);
+    doc.setDrawColor(201, 162, 39);
+    doc.line(60, 245, 150, 245);
     doc.setFontSize(9);
-    doc.text("Visa de conformité", 123, 191);
-    doc.setFont("Helvetica", "bold");
-    doc.text("BILANTIA ACCREDITED", 123, 205);
-
+    doc.setTextColor(200, 200, 200);
+    doc.text(`Délivré le ${dateStr}`, 105, 253, { align: 'center' });
     doc.setFontSize(8);
-    doc.text("Ce document synthétique certifie la réussite et l'équilibre de la balance comptable de l'étudiant.", 15, 285);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Certificat pédagogique délivré par la plateforme Bilantia — ne constitue pas un diplôme d'État.", 105, 268, { align: 'center' });
 
-    doc.save(`Liasse_Fiscale_${moduleName}_Etape_${gameState.step}.pdf`);
+    // --- Une section liasse par module validé ---
+    snapshots.forEach(s => {
+        addLiassePages(doc, s.label, s.agg, s.date, false);
+    });
+
+    doc.save(`Bilantia_Certificat_et_Liasse_Complete.pdf`);
 }
 
 /* ============================================================
@@ -802,7 +954,7 @@ function exitToMenu() {
     window.location.href = 'index.html';
 }
 
-function skipStepTesting() {
+function revealAnswer() {
     const stepData = getActiveStepData();
     if (!stepData) return;
     gameState.journal = [];
@@ -828,6 +980,7 @@ if (typeof module !== 'undefined' && module.exports) {
             currentModule = mod;
             gameState = { moduleType: mod, step: step, xp: 100, journal: [], balances: {}, bonusAwardedStep: null, stepFactor: factor };
         },
-        getGameState: () => gameState
+        getGameState: () => gameState,
+        saveModuleSnapshot, genererLiasseModule, genererLiasseCursus
     };
 }
