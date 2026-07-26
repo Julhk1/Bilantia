@@ -712,7 +712,7 @@ function checkSuccess() {
    ============================================================ */
 
 const MODULE_DISPLAY_NAMES = {
-    mod1: "Module 1 — Fondations Comptables (L1)",
+    mod1: "Module 1 — Les Fondations Comptables",
     mod2: "Module 2 — Comptabilité Générale (L2)",
     mod3: "Module 3 — Comptabilité Approfondie (L3/M1)",
     mod4: "Module 4 — Fiscalité des Sociétés (M2)",
