@@ -427,3 +427,67 @@ td strong { color: var(--gold-bright); font-family: var(--font-mono); font-weigh
 
 .ca3-line { display: flex; justify-content: space-between; padding: 9px 4px; font-size: 13.5px; font-family: var(--font-mono); border-bottom: 1px dashed var(--border-soft); }
 .ca3-line.total { font-weight: 700; color: var(--gold-bright); border-bottom: none; border-top: 2px solid var(--gold-dim); margin-top: 4px; padding-top: 12px; }
+
+/* ============================================================
+   THÈME CLAIR — "Ledger au Grand Jour"
+   Palette parchemin/ivoire + encre forêt, même identité, lisible
+   ============================================================ */
+:root.theme-light {
+    --bg-void: #f6f1e4;
+    --bg-main: #f6f1e4;
+    --bg-card: #fffdf7;
+    --bg-card-raised: #efe6d1;
+    --bg-inset: #ece0c6;
+    --border-color: #ddceac;
+    --border-soft: #e7dabb;
+
+    --text-main: #1f2e21;
+    --text-muted: #56624f;
+    --text-faint: #8b9382;
+    --paper: #1f2e21;
+
+    --gold: #a17d1f;
+    --gold-bright: #7d5f16;
+    --gold-dim: #c2a355;
+
+    --emerald: #1f7a52;
+    --emerald-bright: #146840;
+    --emerald-deep: #dff3e8;
+    --debit-red: #b0452f;
+    --debit-red-bright: #963823;
+    --credit-blue: #2f5f96;
+
+    --gradient-seal: linear-gradient(135deg, #d9b959 0%, #a17d1f 55%, #8a6a15 100%);
+    --gradient-emerald: linear-gradient(135deg, #2fa876 0%, #1f7a52 100%);
+
+    --shadow-card: 0 8px 24px rgba(60,50,20,0.09);
+    --shadow-gold: 0 8px 20px rgba(161,125,31,0.22);
+    --shadow-emerald: 0 8px 20px rgba(31,122,82,0.18);
+}
+
+:root.theme-light body {
+    background-image:
+        radial-gradient(ellipse 900px 500px at 15% -10%, rgba(31,122,82,0.06), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 100% 0%, rgba(161,125,31,0.05), transparent 55%);
+}
+:root.theme-light .card {
+    background:
+        repeating-linear-gradient(180deg, transparent, transparent 27px, rgba(161,125,31,0.055) 28px),
+        var(--bg-card);
+}
+:root.theme-light .btn-main { color: #2a1f04; }
+:root.theme-light select, :root.theme-light input[type="number"], :root.theme-light input[type="text"] {
+    background-color: #fffdf9;
+}
+:root.theme-light ::-webkit-scrollbar-track { background: var(--bg-void); }
+:root.theme-light ::-webkit-scrollbar-thumb { background: var(--border-color); }
+
+/* ============================================================
+   BASCULE DE THÈME
+   ============================================================ */
+.theme-toggle {
+    display: flex; align-items: center; gap: 6px; background: var(--bg-card-raised);
+    border: 1px solid var(--border-color); border-radius: 20px; padding: 6px 12px; cursor: pointer;
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); transition: all 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--gold-dim); color: var(--text-main); }
