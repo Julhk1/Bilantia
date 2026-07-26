@@ -226,7 +226,7 @@ select:focus, input[type="number"]:focus { outline: none; border-color: var(--go
 
 .financial-line {
     display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 9px 13px;
-    background: rgba(10,21,18,0.5); border-radius: 6px; margin-bottom: 6px; border-left: 3px solid transparent;
+    background: var(--bg-inset); border-radius: 6px; margin-bottom: 6px; border-left: 3px solid transparent;
     font-family: var(--font-mono);
 }
 .financial-line span:first-child { font-family: var(--font-body); color: var(--text-muted); }
@@ -491,3 +491,23 @@ td strong { color: var(--gold-bright); font-family: var(--font-mono); font-weigh
     font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); transition: all 0.2s ease;
 }
 .theme-toggle:hover { border-color: var(--gold-dim); color: var(--text-main); }
+
+/* ============================================================
+   HEADER — toujours sombre par design (les deux thèmes) :
+   on fige donc son texte/boutons internes indépendamment du
+   thème choisi, pour ne jamais produire de texte sombre sur
+   fond sombre.
+   ============================================================ */
+header .logo { color: #f3ede0; }
+header .logo::before { color: #c9a227; }
+header .mission-subtitle { color: #93a89b; }
+header .xp-text { color: #e8c766; }
+header .xp-bar-container { background: #0a1512; border-color: #24352c; }
+header .btn-secondary {
+    background: #182620; border-color: #24352c; color: #f3ede0;
+}
+header .btn-secondary:hover { background: #203026; border-color: #c9a227; }
+header .theme-toggle {
+    background: #182620; border-color: #24352c; color: #93a89b;
+}
+header .theme-toggle:hover { border-color: #c9a227; color: #f3ede0; }
