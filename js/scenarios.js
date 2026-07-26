@@ -1,10 +1,10 @@
 const academyScenarios = {
     // ==========================================
-    // MODULE 1 : LICENCE 1 - LES FONDATIONS COMPTABLES (CURSUS COMPLET)
+    // MODULE 1 : LES FONDATIONS COMPTABLES (CURSUS COMPLET)
     // ==========================================
     mod1: {
         1: {
-            title: "L1 - Étape 1 : L'Entité Économique & L'Équilibre du Bilan",
+            title: "Étape 1 : L'Entité Économique & L'Équilibre du Bilan",
             theory: "La comptabilité sert à traduire l'histoire économique d'une entité. Tout commence par le <strong>Bilan</strong>, une photographie financière du patrimoine de l'entreprise à un instant donné. Il est divisé en deux colonnes qui s'équilibrent toujours : le <strong>Passif</strong> (à droite) qui indique l'origine de l'argent (qui a apporté les fonds : associés, banques) et l'<strong>Actif</strong> (à gauche) qui montre l'emploi concret de cet argent (où est stocké le cash : en banque, dans des machines). L'équation absolue est : Actif = Passif.",
             exercise: {
                 instruction: "Constituez l'entreprise en enregistrant l'apport en capital initial des associés pour un montant de 50 000 € déposé sur le compte en banque.",
@@ -14,7 +14,7 @@ const academyScenarios = {
             explanation: { success: "Félicitations, premier pas validé ! Les fonds proviennent du Capital Social (Crédit du passif 101) et s'incarnent en Banque (Débit de l'actif 512). Le bilan initial est à l'équilibre." }
         },
         2: {
-            title: "L1 - Étape 2 : L'Activité Économique - Charges et Produits",
+            title: "Étape 2 : L'Activité Économique - Charges et Produits",
             theory: "Alors que le Bilan fige le patrimoine, le <strong>Compte de Résultat</strong> mesure l'activité de l'entreprise sur une période (l'exercice). Il oppose les <strong>Charges</strong> (classe 6, les dépenses nécessaires qui appauvrissent l'entreprise, comme le loyer ou l'électricité) aux <strong>Produits</strong> (classe 7, les ventes qui l'enrichissent). Les charges augmentent toujours au <strong>Débit</strong>, car elles représentent une consommation d'énergie économique. Attention à bien choisir le compte de charge selon sa nature réelle : un loyer est une <strong>charge externe</strong> (compte <strong>613 - Locations</strong>), jamais un achat de matières premières (601).",
             exercise: {
                 instruction: "L'entreprise paie immédiatement par virement bancaire son premier loyer commercial pour un montant de 3 000 €.",
@@ -24,8 +24,8 @@ const academyScenarios = {
             explanation: { success: "Correct ! Le loyer est une charge externe (Débit du compte 613 - Locations, jamais le 601 réservé aux achats de matières) qui vient imputer négativement ton résultat net de 3 000 €. La Banque (Crédit 512) diminue à l'actif." }
         },
         3: {
-            title: "L1 - Étape 3 : La Richesse Créée - Le flux de Produits",
-            theory: "Les <strong>Produits</strong> (classe 7) mesurent la performance commerciale (Chiffre d'Affaires). À l'inverse des charges, les produits augmentent au <strong>Crédit</strong>. Ils tirent le résultat net vers le haut, ce qui, lors de la clôture annuelle, viendra gonfler les capitaux propres au passif du bilan.",
+            title: "Étape 3 : La Richesse Créée - Le Flux de Produits",
+            theory: "Les <strong>Produits</strong> (classe 7) mesurent la performance commerciale (Chiffre d'Affaires). À l'inverse des charges, les produits augmentent au <strong>Crédit</strong>. Ils tirent le résultat net vers le haut, ce qui, lors de la clôture annuelle, viendra gonfler les capitaux propres au passif du bilan. Ici, le client règle comptant : le produit et l'encaissement ont lieu au même instant.",
             exercise: {
                 instruction: "Enregistrez une vente de prestations de services d'un montant de 8 000 € HT encaissée immédiatement sur le compte bancaire de l'entreprise.",
                 accountsAllowed: ["512", "701"],
@@ -34,8 +34,8 @@ const academyScenarios = {
             explanation: { success: "Magnifique ! Le produit de vente augmente au Crédit (701) tandis que le flux de trésorerie entre au Débit de la Banque (512)." }
         },
         4: {
-            title: "L1 - Étape 4 : Le Principe Absolu de la Partie Double",
-            theory: "En comptabilité, aucune écriture ne voyage seule. Chaque transaction implique au moins deux comptes : le total des montants inscrits au <strong>Débit</strong> doit être rigoureusement ÉGAL au total des montants inscrits au <strong>Crédit</strong>. C'est ce mécanisme de balance permanente qui garantit que le système ne perd jamais d'informations.",
+            title: "Étape 4 : Le Principe Absolu de la Partie Double",
+            theory: "En comptabilité, aucune écriture ne voyage seule. Chaque transaction implique au moins deux comptes : le total des montants inscrits au <strong>Débit</strong> doit être rigoureusement ÉGAL au total des montants inscrits au <strong>Crédit</strong>. C'est ce mécanisme de balance permanente qui garantit que le système ne perd jamais d'informations, quel que soit le nombre de comptes mouvementés dans une même écriture.",
             exercise: {
                 instruction: "Pour renforcer ses liquidités, l'entreprise souscrit un emprunt de 20 000 € auprès de son partenaire financier. Enregistrez la réception des fonds.",
                 accountsAllowed: ["512", "164"],
@@ -44,7 +44,7 @@ const academyScenarios = {
             explanation: { success: "Écriture validée. La dette financière à long terme augmente au crédit du passif (164) et la trésorerie se renforce au débit de l'actif (512)." }
         },
         5: {
-            title: "L1 - Étape 5 : Les Délais de Paiement - La Dette Fournisseur",
+            title: "Étape 5 : Les Délais de Paiement - La Dette Fournisseur",
             theory: "Dans le monde des affaires, on paie rarement tout au comptant. Lorsqu'on achète des matières ou des services avec un délai de paiement (par exemple à 30 jours), on ne touche pas à la banque immédiatement. On constate la charge (classe 6) et on fait naître une dette transitoire envers le tiers au passif : le compte <strong>401 - Fournisseurs</strong>.",
             exercise: {
                 instruction: "Vous recevez une facture d'achat de matières premières de 4 000 € HT. Le paiement est prévu le mois prochain. Enregistrez cette opération à crédit.",
@@ -54,7 +54,7 @@ const academyScenarios = {
             explanation: { success: "C'est exactement ça. La charge augmente au Débit (601) et la dette fournisseur grandit au Crédit (401). Ton bilan reste équilibré." }
         },
         6: {
-            title: "L1 - Étape 6 : L'Extinction des Dettes par le Règlement",
+            title: "Étape 6 : L'Extinction des Dettes par le Règlement",
             theory: "Quand l'échéance arrive, il faut honorer ses engagements. Pour solder (éteindre) une dette qui était née au Crédit (401), il faut la débiter du même montant. En contrepartie, on constate la sortie d'argent effective au Crédit du compte Banque (512).",
             exercise: {
                 instruction: "Payez par virement bancaire la facture du fournisseur de l'étape précédente pour un montant de 4 000 €.",
@@ -64,7 +64,7 @@ const academyScenarios = {
             explanation: { success: "Parfait. Le compte 401 revient à zéro (Dette effacée au Débit) et l'argent quitte l'actif de la banque (Crédit 512)." }
         },
         7: {
-            title: "L1 - Étape 7 : Les Délais de Vente - La Créance Client",
+            title: "Étape 7 : Les Délais de Vente - La Créance Client",
             theory: "Le mécanisme est symétrique pour vos ventes. Si vous accordez un délai de règlement à vos clients, l'argent n'entre pas directement en banque. Vous validez le produit (Crédit 701) et vous matérialisez un droit d'exiger cet argent plus tard à l'actif : le compte <strong>411 - Clients</strong> (Créance).",
             exercise: {
                 instruction: "Facturez une prestation de services de 6 000 € HT à un grand compte. Un délai de paiement à 30 jours lui est accordé.",
@@ -74,7 +74,7 @@ const academyScenarios = {
             explanation: { success: "Très bien ! La créance (Actif 411) augmente au Débit et le Chiffre d'Affaires grandit au Crédit (701)." }
         },
         8: {
-            title: "L1 - Étape 8 : L'Encaisserment des Créances Clients",
+            title: "Étape 8 : L'Encaissement des Créances Clients",
             theory: "Lorsque le client s'acquitte de sa facture, la créance s'éteint. Pour faire disparaître ce droit qui était enregistré au Débit (411), on le bascule au Crédit du même compte. En contrepartie, l'argent se matérialise enfin au Débit de notre Banque (512).",
             exercise: {
                 instruction: "Enregistrez la réception du virement bancaire du client pour un montant de 6 000 €, soldant ainsi sa dette envers vous.",
@@ -84,14 +84,54 @@ const academyScenarios = {
             explanation: { success: "Excellent ! La créance est soldée (Crédit 411) et l'argent est désormais sécurisé sur ton compte bancaire (Débit 512)." }
         },
         9: {
-            title: "L1 - Étape 9 : La notion d'Investissement Durable (Immobilisation)",
-            theory: "Attention à ne pas confondre une Charge et une <strong>Immobilisation</strong>. Si un achat est consommé rapidement (café, papier), c'est une charge (classe 6). Si cet achat est un outil destiné à rester plus d'un an dans l'entreprise pour générer de la valeur (ordinateur, voiture, machine), c'est un investissement. Il s'enregistre à l'Actif en classe 2.",
+            title: "Étape 9 : Une Charge Universelle - Les Salaires du Personnel",
+            theory: "Parmi toutes les charges d'exploitation, celle du personnel est presque toujours la plus importante pour une entreprise. Le salaire net versé à un employé s'enregistre au Débit du compte <strong>641 - Salaires du Personnel</strong>, en contrepartie d'une sortie de banque. (Le détail du bulletin de paie — brut, retenues, cotisations URSSAF — est une technicité approfondie réservée à un module dédié ; ici, on retient l'essentiel : un salaire est une charge, au même titre qu'un loyer.)",
             exercise: {
-                instruction: "Achetez au comptant par chèque bancaire du matériel informatique professionnel pour un montant de 2 500 € HT.",
-                accountsAllowed: ["215", "512"],
-                expectedEntries: { "215": { debit: 2500 }, "512": { credit: 2500 } }
+                instruction: "Vous versez par virement bancaire le salaire net de votre unique employé pour un montant de 2 200 €.",
+                accountsAllowed: ["641", "512"],
+                expectedEntries: { "641": { debit: 2200 }, "512": { credit: 2200 } }
             },
-            explanation: { success: "Écriture d'école validée. Le patrimoine s'enrichit d'une immobilisation au Débit du compte 215, financée par un décaissement au Crédit de la banque 512." }
+            explanation: { success: "Bien vu ! Le salaire est une charge comme une autre (Débit 641), qui réduit à la fois ton résultat net et ta trésorerie (Crédit 512)." }
+        },
+        10: {
+            title: "Étape 10 : La Notion d'Investissement Durable (Immobilisation)",
+            theory: "Attention à ne pas confondre une Charge et une <strong>Immobilisation</strong>. Si un achat est consommé rapidement (café, papier), c'est une charge (classe 6). Si cet achat est un bien durable destiné à rester plus d'un an dans l'entreprise pour générer de la valeur (ordinateur, mobilier, véhicule), c'est un investissement qui s'enregistre à l'Actif en classe 2. Un ordinateur de bureau est une immobilisation corporelle courante, mais ce n'est ni une machine industrielle ni un four : elle rejoint le compte <strong>218 - Autres Immobilisations Corporelles</strong>, distinct du 215 réservé au matériel de production.",
+            exercise: {
+                instruction: "Achetez au comptant par virement bancaire du matériel informatique de bureau pour un montant de 2 500 € HT.",
+                accountsAllowed: ["218", "512"],
+                expectedEntries: { "218": { debit: 2500 }, "512": { credit: 2500 } }
+            },
+            explanation: { success: "Écriture d'école validée. Le patrimoine s'enrichit d'une immobilisation au Débit du compte 218 (et non 215, réservé au matériel industriel), financée par un décaissement au Crédit de la banque 512." }
+        },
+        11: {
+            title: "Étape 11 : L'Usure du Temps - La Notion d'Amortissement",
+            theory: "Un ordinateur acheté aujourd'hui ne vaudra plus rien dans quelques années : il s'use, devient obsolète. La comptabilité traduit cette perte de valeur progressive et prévisible via l'<strong>amortissement</strong>. Chaque année, on constate une charge calculée (jamais un décaissement réel !) au Débit du compte <strong>6811 - Dotations aux Amortissements</strong>, en contrepartie d'un compte spécial qui vient réduire la valeur de l'actif au Bilan sans jamais l'effacer : <strong>2818 - Amortissements des Autres Immobilisations Corporelles</strong>.",
+            exercise: {
+                instruction: "Amortissez linéairement le matériel informatique de l'étape précédente (2 500 €) sur sa durée de vie estimée de 5 ans, soit une dotation annuelle de 500 €.",
+                accountsAllowed: ["6811", "2818"],
+                expectedEntries: { "6811": { debit: 500 }, "2818": { credit: 500 } }
+            },
+            explanation: { success: "Parfait ! Cette charge (500 €) ne sort pas un centime de ta banque — c'est une écriture purement comptable — mais elle reflète fidèlement la perte de valeur réelle de ton matériel dans le temps. Sa valeur nette au Bilan n'est plus que de 2 000 €." }
+        },
+        12: {
+            title: "Étape 12 : Introduction à la TVA - Le Cas de l'Achat",
+            theory: "La Taxe sur la Valeur Ajoutée (TVA) est partout dans la vie économique réelle, mais c'est un piège classique du débutant de croire qu'elle appauvrit ou enrichit l'entreprise. En réalité, l'entreprise n'est qu'un <strong>collecteur</strong> pour l'État : à l'achat, la TVA payée au fournisseur (au taux standard de 20%) est une créance récupérable, jamais une charge. Elle se loge à l'actif au compte <strong>44566 - TVA Déductible</strong>, distinct du prix d'achat lui-même.",
+            exercise: {
+                instruction: "Achetez au comptant des fournitures pour 1 000 € HT (+ 200 € de TVA déductible à 20%, soit 1 200 € TTC), réglées immédiatement par banque.",
+                accountsAllowed: ["601", "44566", "512"],
+                expectedEntries: { "601": { debit: 1000 }, "44566": { debit: 200 }, "512": { credit: 1200 } }
+            },
+            explanation: { success: "Exact ! Seuls les 1 000 € HT constituent une vraie charge (601). Les 200 € de TVA (44566) sont une créance récupérable sur l'État — pas un centime de charge supplémentaire pour l'entreprise." }
+        },
+        13: {
+            title: "Étape 13 : Introduction à la TVA - Le Cas de la Vente",
+            theory: "Symétriquement, lorsque vous facturez un client, vous encaissez de la TVA en son nom pour le compte de l'État — ce n'est pas non plus votre argent, ni un produit qui vous enrichit. Cette TVA collectée constitue une dette envers l'État, logée au passif au compte <strong>44571 - TVA Collectée</strong>, bien distincte de votre Chiffre d'Affaires réel (701).",
+            exercise: {
+                instruction: "Facturez une prestation de services de 5 000 € HT (+ 1 000 € de TVA collectée à 20%, soit 6 000 € TTC), encaissée immédiatement par banque.",
+                accountsAllowed: ["512", "701", "44571"],
+                expectedEntries: { "512": { debit: 6000 }, "701": { credit: 5000 }, "44571": { credit: 1000 } }
+            },
+            explanation: { success: "Excellent ! Ton vrai Chiffre d'Affaires est de 5 000 € (701), pas 6 000 €. Les 1 000 € de TVA (44571) ne sont qu'une dette temporaire envers l'État, en attendant la déclaration périodique — un mécanisme que tu approfondiras au module suivant." }
         },
     },
 
