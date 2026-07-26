@@ -47,7 +47,7 @@ const academyScenarios = {
             title: "L1 - Étape 5 : Les Délais de Paiement - La Dette Fournisseur",
             theory: "Dans le monde des affaires, on paie rarement tout au comptant. Lorsqu'on achète des matières ou des services avec un délai de paiement (par exemple à 30 jours), on ne touche pas à la banque immédiatement. On constate la charge (classe 6) et on fait naître une dette transitoire envers le tiers au passif : le compte <strong>401 - Fournisseurs</strong>.",
             exercise: {
-                instruction: "Vous recevez une facture d'achat de consommables de 4 000 € HT. Le paiement est prévu le mois prochain. Enregistrez cette opération à crédit.",
+                instruction: "Vous recevez une facture d'achat de matières premières de 4 000 € HT. Le paiement est prévu le mois prochain. Enregistrez cette opération à crédit.",
                 accountsAllowed: ["601", "401"],
                 expectedEntries: { "601": { debit: 4000 }, "401": { credit: 4000 } }
             },
@@ -107,7 +107,7 @@ const academyScenarios = {
             title: "L2 - Étape 1 : Le Mécanisme de la TVA Collectée sur Ventes",
             theory: "La Taxe sur la Valeur Ajoutée (TVA) est un impôt indirect sur la consommation. Pour l'entreprise, elle est totalement neutre. Lors d'une vente, l'entité facture le montant Toutes Taxes Comprises (TTC) au client. Elle enregistre sa richesse réelle Hors Taxes (HT) en compte de produit (701) et isole la TVA facturée sur le compte <strong>44571 - TVA Collectée</strong>. Ce compte représente une dette stricte de l'entreprise envers l'État.",
             exercise: {
-                instruction: "Facturez une vente de marchandises pour un montant de 10 000 € HT, soumise au taux standard de TVA à 20% (soit 2 000 € de TVA). Le client règle l'intégralité du montant TTC immédiatement en banque.",
+                instruction: "Facturez une vente de produits finis pour un montant de 10 000 € HT, soumise au taux standard de TVA à 20% (soit 2 000 € de TVA). Le client règle l'intégralité du montant TTC immédiatement en banque.",
                 accountsAllowed: ["512", "701", "44571"],
                 expectedEntries: { "512": { debit: 12000 }, "701": { credit: 10000 }, "44571": { credit: 2000 } }
             },
@@ -127,7 +127,7 @@ const academyScenarios = {
             title: "L2 - Étape 3 : Facture d'Achat avec Réductions Commerciales (Rabais, Remise, Ristourne)",
             theory: "En comptabilité, les trois R (Rabais, Remise, Ristourne) accordés directement sur la facture d'achat d'origine ne se comptabilisent pas sur un compte séparé. On enregistre la charge directement pour son montant **Net Commercial** (c'est-à-dire le montant HT après déduction de la remise). La TVA s'applique ensuite sur ce net commercial.",
             exercise: {
-                instruction: "Vous recevez une facture d'achat de marchandises. Prix brut : 10 000 € HT. Remise commerciale de 10% (Net commercial = 9 000 € HT). TVA à 20% = 1 800 €. Montant TTC payé par banque = 10 800 €. Enregistrez la ligne.",
+                instruction: "Vous recevez une facture d'achat de matières premières. Prix brut : 10 000 € HT. Remise commerciale de 10% (Net commercial = 9 000 € HT). TVA à 20% = 1 800 €. Montant TTC payé par banque = 10 800 €. Enregistrez la ligne.",
                 accountsAllowed: ["601", "44566", "512"],
                 expectedEntries: { "601": { debit: 9000 }, "44566": { debit: 1800 }, "512": { credit: 10800 } }
             },
@@ -135,13 +135,13 @@ const academyScenarios = {
         },
         4: {
             title: "L2 - Étape 4 : Les Réductions Financières - L'Escompte de Règlement",
-            theory: "Contrairement aux remises commerciales, l'**Escompte** est une réduction financière accordée en cas de paiement rapide ou anticipé. L'escompte obtenu d'un fournisseur constitue un produit financier pour l'entreprise. On doit donc enregistrer la charge brute HT, constater le produit financier au Crédit (compte assimilé classe 7, ici représenté globalement par le 701 par simplification) et ajuster la TVA.",
+            theory: "Contrairement aux remises commerciales, l'**Escompte** est une réduction financière accordée en cas de paiement rapide ou anticipé. L'escompte obtenu d'un fournisseur constitue un produit financier pour l'entreprise — jamais du chiffre d'affaires. On enregistre donc la charge brute HT au 601, on constate le produit financier au Crédit du compte dédié <strong>765 - Escomptes Obtenus</strong> (jamais le 701, réservé aux ventes), et on ajuste la TVA sur la base nette financière.",
             exercise: {
-                instruction: "Achat de consommables pour 2 000 € HT. Escompte financier obtenu de 100 €. TVA nette recalculée = 380 €. Net TTC payé en banque = 2 280 €. Enregistrez cette opération complexe (601 au débit pour 2000, 44566 au débit pour 380, banque au crédit pour 2280 et 701 au crédit pour 100).",
-                accountsAllowed: ["601", "44566", "512", "701"],
-                expectedEntries: { "601": { debit: 2000 }, "44566": { debit: 380 }, "512": { credit: 2280 }, "701": { credit: 100 } }
+                instruction: "Achat de matières premières pour 2 000 € HT. Escompte de règlement obtenu de 100 € pour paiement comptant. TVA nette recalculée = 380 €. Net TTC payé en banque = 2 280 €. Enregistrez cette opération complexe (601 au débit pour 2000, 44566 au débit pour 380, banque au crédit pour 2280 et 765 au crédit pour 100).",
+                accountsAllowed: ["601", "44566", "512", "765"],
+                expectedEntries: { "601": { debit: 2000 }, "44566": { debit: 380 }, "512": { credit: 2280 }, "765": { credit: 100 } }
             },
-            explanation: { success: "Splendide ! C'est une écriture technique de haut niveau. L'escompte est bien isolé en produit financier au crédit." }
+            explanation: { success: "Splendide ! C'est une écriture technique de haut niveau. L'escompte est bien isolé en produit financier (765) au crédit, distinct de tes ventes." }
         },
         5: {
             title: "L2 - Étape 5 : L'Acquisition d'Actifs Immobilisés avec TVA",
@@ -165,7 +165,7 @@ const academyScenarios = {
         },
         7: {
             title: "L2 - Étape 7 : Gestion d'Inventaire - La Variation des Stocks",
-            theory: "Pour respecter le principe fondamental de découpage des exercices, une entreprise ne peut pas laisser dans ses charges de l'année des marchandises achetées mais non revendues (qui dorment dans l'entrepôt). En fin d'exercice, on réalise un inventaire physique et on passe une écriture pour enregistrer le Stock Final à l'Actif (compte 311) en contrepartie du compte <strong>6031 - Variation des stocks</strong> au Crédit.",
+            theory: "Pour respecter le principe fondamental de découpage des exercices, une entreprise ne peut pas laisser dans ses charges de l'année des matières premières achetées mais non consommées (qui dorment dans l'entrepôt). En fin d'exercice, on réalise un inventaire physique et on passe une écriture pour enregistrer le Stock Final à l'Actif (compte 311) en contrepartie du compte <strong>6031 - Variation des stocks</strong> au Crédit.",
             exercise: {
                 instruction: "L'inventaire de fin d'année comptabilise la présence de 6 000 € de matières premières inutilisées en réserve. Enregistrez ce stock de clôture.",
                 accountsAllowed: ["311", "6031"],
@@ -266,34 +266,34 @@ const academyScenarios = {
             explanation: { success: "Écriture de haut niveau validée ! La créance historique est soldée (Crédit 411 pour 10 000 €), le cash réel entre en banque (9 500 €) et la perte de change est isolée au débit du 666." }
         },
         5: {
-            title: "L3/M1 - Étape 5 : Consolidation - Le Concept de Groupe",
-            theory: "Dans un groupe de sociétés (Maison mère + Filiales), chaque entité produit ses propres comptes. Mais pour les investisseurs, on doit présenter un **Bilan Consolidé**, comme s'il n'y avait qu'une seule et unique entreprise géante. La première règle de la consolidation est de cumuler les balances de toutes les filiales.",
+            title: "L3/M1 - Étape 5 : Prise de Participation dans une Filiale",
+            theory: "Une entreprise qui prend une position stratégique durable dans une autre société (pour la contrôler ou l'influencer) enregistre cet investissement à l'actif immobilisé, au compte <strong>261 - Titres de Participation</strong>, et non en trésorerie courante. Attention : la <strong>consolidation</strong> à proprement parler (fusionner les comptes de la mère et de la filiale en un unique bilan de groupe) est un retraitement qui se fait sur un tableur de consolidation externe, jamais directement dans la comptabilité d'une seule entité — ce n'est donc pas une écriture de journal classique, et ce module se concentre sur ce que l'entreprise mère enregistre réellement dans ses propres livres.",
             exercise: {
-                instruction: "Pour initier l'exercice de consolidation de fin d'année, enregistrez l'intégration globale de la trésorerie d'une filiale pour un montant de 30 000 € injectés sur votre ligne Banque.",
-                accountsAllowed: ["512", "101"],
-                expectedEntries: { "512": { debit: 30000 }, "101": { credit: 30000 } }
+                instruction: "Vous acquérez 30% du capital d'une société partenaire stratégique pour un montant de 30 000 €, réglé immédiatement par virement bancaire. Enregistrez ce titre de participation à l'actif.",
+                accountsAllowed: ["261", "512"],
+                expectedEntries: { "261": { debit: 30000 }, "512": { credit: 30000 } }
             },
-            explanation: { success: "Étape validée. La trésorerie cumulée du groupe augmente à l'actif." }
+            explanation: { success: "Étape validée. Le titre de participation entre à l'actif immobilisé (261), en échange d'une sortie de trésorerie réelle et vérifiable." }
         },
         6: {
-            title: "L3/M1 - Étape 6 : Élimination des Ventes Internes (Flux Réciproques)",
-            theory: "Au sein d'un groupe consolidé, si la société mère vend des marchandises à sa filiale, cette vente n'a pas de réalité économique vis-à-vis du monde extérieur. Si on la laissait, le Chiffre d'Affaires du groupe serait artificiellement gonflé. On procède donc à des **retraitements de consolidation** pour annuler ces flux internes : on débite le compte de produit 701.",
+            title: "L3/M1 - Étape 6 : Dividendes Reçus de la Participation",
+            theory: "Lorsque la filiale dans laquelle vous détenez des titres réalise des bénéfices et décide de les distribuer, vous percevez votre quote-part sous forme de dividendes. Ce n'est ni une vente, ni un remboursement de votre investissement d'origine : c'est un <strong>produit financier</strong>, enregistré au compte <strong>762 - Revenus des Titres de Participation</strong>.",
             exercise: {
-                instruction: "La maison mère a facturé 15 000 € de prestations à sa filiale au cours de l'année. Annulez ce produit réciproque interne au niveau du groupe consolidé.",
-                accountsAllowed: ["701", "101"],
-                expectedEntries: { "701": { debit: 15000 }, "101": { credit: 15000 } }
+                instruction: "La filiale dans laquelle vous détenez des titres vous verse un dividende de 3 000 € par virement bancaire. Enregistrez ce produit financier.",
+                accountsAllowed: ["512", "762"],
+                expectedEntries: { "512": { debit: 3000 }, "762": { credit: 3000 } }
             },
-            explanation: { success: "Exact ! Débiter le 701 permet de purger le Chiffre d'Affaires consolidé des ventes internes fictives." }
+            explanation: { success: "Exact ! Le dividende enrichit ta trésorerie (Débit 512) et améliore ton résultat via un produit financier (Crédit 762), sans jamais toucher à ton compte de Capital." }
         },
         7: {
-            title: "L3/M1 - Étape 7 : Élimination des Achats Internes",
-            theory: "Pour que l'annulation de l'étape précédente soit complète, il faut également éliminer la charge d'achat symétrique enregistrée par la filiale. On va donc créditer le compte de charge 601 du même montant afin de neutraliser l'opération interne de manière parfaitement équilibrée.",
+            title: "L3/M1 - Étape 7 : Dépréciation des Titres de Participation",
+            theory: "Le même principe de prudence appliqué plus tôt aux créances clients douteuses s'applique aussi aux titres financiers : si la valeur réelle de votre participation chute durablement en dessous de son prix d'acquisition, vous devez constater une dépréciation. On débite une charge financière calculée <strong>686 - Dotations aux Dépréciations Financières</strong> et on crédite un compte de dépréciation dédié, <strong>296 - Dépréciation des Titres de Participation</strong>, qui viendra réduire la valeur brute du 261 au Bilan sans jamais l'annuler directement.",
             exercise: {
-                instruction: "Annulez la charge d'achat intra-groupe correspondante de 15 000 € enregistrée dans les comptes de la filiale.",
-                accountsAllowed: ["101", "601"],
-                expectedEntries: { "101": { debit: 15000 }, "601": { credit: 15000 } }
+                instruction: "La filiale traverse une passe difficile : la valeur réelle de votre participation (achetée 30 000 €) est désormais estimée à seulement 24 000 €. Par prudence, constituez une dépréciation de 6 000 € sur vos titres.",
+                accountsAllowed: ["686", "296"],
+                expectedEntries: { "686": { debit: 6000 }, "296": { credit: 6000 } }
             },
-            explanation: { success: "Parfait ! Le produit interne et la charge interne ont tous les deux été neutralisés. Le résultat consolidé du groupe reste inchangé et propre." }
+            explanation: { success: "Parfait réflexe de prudence ! Ta participation brute (261) reste affichée à son coût historique de 30 000 €, mais le Bilan présente désormais une valeur nette de 24 000 € grâce à la dépréciation (296)." }
         },
         8: {
             title: "L3/M1 - Étape 8 : L'Activation des Frais de R&D",
@@ -438,13 +438,13 @@ const academyScenarios = {
         },
         9: {
             title: "M2 - Étape 9 : Taxes Locales - Enregistrement de la CFE",
-            theory: "Les entreprises sont soumises à des impôts locaux, notamment la **Cotisation Foncière des Entreprises (CFE)**. Contrairement à l'IS, la CFE ne dépend pas des bénéfices, c'est une charge d'exploitation courante. Elle s'enregistre au Débit du compte de charges <strong>601 - Achats Consommations</strong> (par simplification d'arborescence) et se paie par la banque.",
+            theory: "Les entreprises sont soumises à des impôts locaux, notamment la **Cotisation Foncière des Entreprises (CFE)**. Contrairement à l'IS, la CFE ne dépend pas des bénéfices : c'est une charge d'exploitation courante, mais ce n'est en aucun cas un achat de matières premières. Elle s'enregistre au Débit du compte dédié <strong>6351 - Impôts, Taxes et Versements Assimilés</strong> et se paie par la banque.",
             exercise: {
                 instruction: "Enregistrez l'avis d'imposition et le paiement immédiat par banque de la CFE annuelle d'un montant de 800 €.",
-                accountsAllowed: ["601", "512"],
-                expectedEntries: { "601": { debit: 800 }, "512": { credit: 800 } }
+                accountsAllowed: ["6351", "512"],
+                expectedEntries: { "6351": { debit: 800 }, "512": { credit: 800 } }
             },
-            explanation: { success: "Validé. La charge d'exploitation locale est actée au débit et les fonds sont décaissés." }
+            explanation: { success: "Validé. La charge fiscale locale est actée sur son propre compte d'impôts et taxes (6351), bien distinct des achats, et les fonds sont décaissés." }
         },
     },
 
@@ -688,13 +688,13 @@ const academyScenarios = {
         },
         14: {
             title: "Fiscalité : Liquidation de l'IS de la boulangerie",
-            theory: "L'analyse du compte de résultat dégage un bénéfice. On calcule l'impôt sur les sociétés dû pour l'année.",
+            theory: "L'analyse du compte de résultat dégage un bénéfice. On calcule l'impôt sur les sociétés dû pour l'année, dette envers l'État qui s'enregistre au compte dédié <strong>444</strong>, jamais au 401 réservé à vos fournisseurs de farine.",
             exercise: {
                 instruction: "Comptabilisez la charge d'Impôt sur les Sociétés (IS) annuelle pour un montant fixé à 1 500 €.",
-                accountsAllowed: ["695", "401"],
-                expectedEntries: { "695": { debit: 1500 }, "401": { credit: 1500 } }
+                accountsAllowed: ["695", "444"],
+                expectedEntries: { "695": { debit: 1500 }, "444": { credit: 1500 } }
             },
-            explanation: { success: "Impôt acté au débit et dette fiscale posée au passif." }
+            explanation: { success: "Impôt acté au débit et dette fiscale envers l'État posée au passif (444), bien distincte de tes dettes fournisseurs." }
         },
     },
 
@@ -724,13 +724,13 @@ const academyScenarios = {
         },
         3: {
             title: "Mois 3 : Facture de serveurs (Cloud AWS)",
-            theory: "Pour faire tourner votre logiciel SaaS, vous louez de l'infrastructure cloud. C'est une charge d'exploitation récurrente.",
+            theory: "Pour faire tourner votre logiciel SaaS, vous louez de l'infrastructure cloud. C'est une charge d'exploitation récurrente — mais surtout pas un achat de matières premières (601, qui n'a aucun sens pour une entreprise qui ne fabrique rien de physique) : on utilise le compte <strong>606 - Achats Non Stockés</strong>, dédié aux consommations de services et fournitures non stockables.",
             exercise: {
                 instruction: "Enregistrez la facture d'hébergement web cloud pour 4 000 € HT (+ 800 € de TVA déductible), payée par carte bancaire immédiatement.",
-                accountsAllowed: ["601", "44566", "512"],
-                expectedEntries: { "601": { debit: 4000 }, "44566": { debit: 800 }, "512": { credit: 4800 } }
+                accountsAllowed: ["606", "44566", "512"],
+                expectedEntries: { "606": { debit: 4000 }, "44566": { debit: 800 }, "512": { credit: 4800 } }
             },
-            explanation: { success: "Charge cloud AWS enregistrée et payée." }
+            explanation: { success: "Charge cloud AWS enregistrée sur le bon compte (606) et payée." }
         },
         4: {
             title: "Mois 6 : Encaissement des premiers abonnements annuels",
@@ -784,13 +784,13 @@ const academyScenarios = {
         },
         9: {
             title: "Inventaire : Amortissement du logiciel activé",
-            theory: "La plateforme logicielle activée au mois 2 perd de sa valeur technologique. Amortissons-la.",
+            theory: "La plateforme logicielle activée au mois 2 (compte 203) perd de sa valeur technologique. Amortissons-la sur son propre compte d'amortissement immatériel <strong>2803</strong>, distinct de celui du matériel physique (2815) que cette startup ne possède pas.",
             exercise: {
                 instruction: "Enregistrez l'amortissement annuel de la R&D pour une dotation linéaire de 6 000 €.",
-                accountsAllowed: ["6811", "2815"],
-                expectedEntries: { "6811": { debit: 6000 }, "2815": { credit: 6000 } }
+                accountsAllowed: ["6811", "2803"],
+                expectedEntries: { "6811": { debit: 6000 }, "2803": { credit: 6000 } }
             },
-            explanation: { success: "Dotation immatérielle enregistrée." }
+            explanation: { success: "Dotation immatérielle enregistrée sur le bon compte (2803), qui suit fidèlement la valeur nette de ton actif logiciel." }
         },
         10: {
             title: "Inventaire : Régularisation du cut-off (PCA)",
@@ -804,13 +804,13 @@ const academyScenarios = {
         },
         11: {
             title: "Fiscalité : Liquidation de l'IS de la startup",
-            theory: "Malgré les investissements, l'activité SaaS dégage un bénéfice taxable en fin d'exercice.",
+            theory: "Malgré les investissements, l'activité SaaS dégage un bénéfice taxable en fin d'exercice. Cette dette fiscale se loge au compte dédié 444, jamais au 401 réservé à vos fournisseurs.",
             exercise: {
                 instruction: "Enregistrez la charge d'Impôt sur les Sociétés calculée pour un montant de 3 000 €.",
-                accountsAllowed: ["695", "401"],
-                expectedEntries: { "695": { debit: 3000 }, "401": { credit: 3000 } }
+                accountsAllowed: ["695", "444"],
+                expectedEntries: { "695": { debit: 3000 }, "444": { credit: 3000 } }
             },
-            explanation: { success: "IS comptabilisé à l'inventaire." }
+            explanation: { success: "IS comptabilisé à l'inventaire, sur le compte d'État qui lui est propre." }
         },
     },
 
@@ -889,14 +889,14 @@ const academyScenarios = {
             explanation: { success: "Charges sociales d'usine ajustées, le bilan s'équilibre à nouveau !" }
         },
         8: {
-            title: "Consolidation : Annulation d'un flux réciproque filiale",
-            theory: "Votre groupe détient une filiale de distribution. Vous devez retraiter et éliminer une vente interne réciproque pour nettoyer le Chiffre d'Affaires consolidé.",
+            title: "Étape 8 : Prise de Participation dans un Sous-Traitant Stratégique",
+            theory: "Votre groupe industriel sécurise sa chaîne d'approvisionnement en prenant une part du capital d'un sous-traitant clé. Cet investissement durable s'enregistre à l'actif immobilisé, au compte <strong>261 - Titres de Participation</strong>, et non comme une charge d'exploitation. (Note : la consolidation complète des comptes d'un groupe — fusionner mère et filiales en un bilan unique — se fait sur un tableur de consolidation externe, jamais par une écriture directe dans les livres d'une seule entité.)",
             exercise: {
-                instruction: "Annulez une vente interne réalisée avec votre filiale pour un montant de 15 000 € en débitant le compte de produit 701.",
-                accountsAllowed: ["701", "101"],
-                expectedEntries: { "701": { debit: 15000 }, "101": { credit: 15000 } }
+                instruction: "Investissez 50 000 € par virement bancaire dans les titres de participation d'un sous-traitant stratégique.",
+                accountsAllowed: ["261", "512"],
+                expectedEntries: { "261": { debit: 50000 }, "512": { credit: 50000 } }
             },
-            explanation: { success: "Retraitement d'expert validé ! Le Chiffre d'Affaires consolidé du groupe est nettoyé." }
+            explanation: { success: "Investissement stratégique acté à l'actif immobilisé (261), en échange d'une vraie sortie de trésorerie." }
         },
         9: {
             title: "Inventaire : Amortissement industriel linéaire",
@@ -930,3 +930,7 @@ const academyScenarios = {
         },
     }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = academyScenarios;
+}
