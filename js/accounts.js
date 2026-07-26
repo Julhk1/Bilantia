@@ -34,6 +34,7 @@ const chartOfAccounts = {
     "2805": { label: "Amortissements des Concessions/Brevets", cls: 2, rubrique: "immo", contra: true },
     "2813": { label: "Amortissements des Constructions", cls: 2, rubrique: "immo", contra: true },
     "2815": { label: "Amortissements du Matériel", cls: 2, rubrique: "immo", contra: true },
+    "296": { label: "Dépréciation des Titres de Participation", cls: 2, rubrique: "immo", contra: true },
 
     // ---- CLASSE 3 : STOCKS ----
     "311": { label: "Stock Matières Premières", cls: 3, rubrique: "circulant" },
@@ -98,6 +99,8 @@ const chartOfAccounts = {
     "6811": { label: "Dotations aux Amortissements", cls: 6, rubrique: "charge" },
     "6815": { label: "Dotations aux Provisions pour Risques", cls: 6, rubrique: "charge" },
     "695": { label: "Impôts sur les Bénéfices (IS)", cls: 6, rubrique: "charge" },
+    "6351": { label: "Impôts, Taxes et Versements Assimilés (CFE, CVAE)", cls: 6, rubrique: "charge" },
+    "686": { label: "Dotations aux Dépréciations Financières", cls: 6, rubrique: "charge" },
 
     // ---- CLASSE 7 : PRODUITS ----
     "701": { label: "Ventes de Produits Finis / Prestations", cls: 7, rubrique: "produit" },
@@ -108,6 +111,7 @@ const chartOfAccounts = {
     "761": { label: "Produits Financiers (Intérêts)", cls: 7, rubrique: "produit" },
     "765": { label: "Escomptes Obtenus", cls: 7, rubrique: "produit" },
     "775": { label: "Produits des Cessions d'Actifs", cls: 7, rubrique: "produit" },
+    "762": { label: "Revenus des Titres de Participation", cls: 7, rubrique: "produit" },
     "7816": { label: "Reprises sur Dépréciations", cls: 7, rubrique: "produit" },
     "7815": { label: "Reprises sur Provisions", cls: 7, rubrique: "produit" },
     "791": { label: "Transferts de Charges d'Exploitation", cls: 7, rubrique: "produit" }
