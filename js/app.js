@@ -240,6 +240,11 @@ function handleSaisie() {
     if (debit === 0 && credit === 0) return alert("Saisis un montant.");
     if (debit > 0 && credit > 0) return alert("Double saisie Débit/Crédit interdite sur la même ligne.");
 
+    if (gameState.journal.some(item => item.account === account)) {
+        showError(`⚠️ Le compte ${accountLabel(account)} a déjà été saisi pour cette écriture.`);
+        return;
+    }
+
     const expected = stepData.exercise.expectedEntries[account];
     if (!expected) {
         showError(`⚠️ Le compte ${accountLabel(account)} n'est pas cohérent pour remplir l'énoncé actuel.`);
@@ -957,6 +962,15 @@ function exitToMenu() {
 function revealAnswer() {
     const stepData = getActiveStepData();
     if (!stepData) return;
+    // Annule d'abord tout ce qui est déjà posté pour cette étape (saisie manuelle
+    // partielle, ou clic précédent sur ce même bouton) avant de reposer la
+    // réponse correcte — sans cela, cliquer deux fois ou après une saisie
+    // manuelle partielle double-comptabilisait silencieusement certains comptes.
+    gameState.journal.forEach(item => {
+        const bal = getOrCreateBalance(item.account);
+        bal.debit -= item.debit;
+        bal.credit -= item.credit;
+    });
     gameState.journal = [];
     for (let acc in stepData.exercise.expectedEntries) {
         const exp = stepData.exercise.expectedEntries[acc];
