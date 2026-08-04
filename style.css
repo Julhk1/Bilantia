@@ -511,3 +511,84 @@ header .theme-toggle {
     background: #182620; border-color: #24352c; color: #93a89b;
 }
 header .theme-toggle:hover { border-color: #c9a227; color: #f3ede0; }
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤ 768px) & PETITS TÉLÉPHONES (≤ 420px)
+   ============================================================ */
+@media (max-width: 768px) {
+    .container { padding: 12px; }
+
+    header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 16px;
+    }
+    .logo { font-size: 19px; }
+    .mission-subtitle { font-size: 10px; }
+    .header-right-block {
+        gap: 8px !important;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .header-right-block .btn-secondary,
+    .header-right-block .theme-toggle {
+        font-size: 11.5px;
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+    .xp-container { width: 100%; order: 10; }
+    .xp-bar-container { width: 100%; }
+
+    /* Onglets : barre défilable horizontalement plutôt qu'écrasée */
+    .tab-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 5px;
+        scrollbar-width: thin;
+    }
+    .tab-btn {
+        flex: 0 0 auto;
+        min-width: auto;
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 10px 14px;
+    }
+
+    .card { padding: 16px; margin-bottom: 16px; }
+    .grid { gap: 16px; }
+    .grid-2 { gap: 12px; }
+
+    h1, .hero h1 { font-size: 26px !important; }
+    .tab-heading { font-size: 16px; }
+    .step-title, #step-title { font-size: 17px !important; }
+
+    /* Tableaux : défilement horizontal plutôt que débordement de page */
+    .ledger-table, .balance-table, table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+    .ledger-account-header { flex-wrap: wrap; gap: 6px; }
+
+    .ratio-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ratio-value { font-size: 22px; }
+
+    .piece-strip { font-size: 10px; gap: 8px; }
+    .btn-main { padding: 13px 16px; font-size: 13.5px; }
+
+    .success-card h3 { font-size: 16px; }
+}
+
+@media (max-width: 420px) {
+    .ratio-grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .logo { font-size: 17px; }
+    .header-right-block .btn-secondary,
+    .header-right-block .theme-toggle { font-size: 10.5px; padding: 7px 10px; }
+    .card { padding: 13px; }
+    select, input[type="number"], input[type="text"] { font-size: 13px; padding: 10px 12px; }
+}
